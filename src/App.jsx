@@ -174,21 +174,21 @@ function App() {
 
   const handleFullScreenToggle = () => {
     if (mediaRef.current) {
-      if (!document.fullscreenElement) {
-        mediaRef.current.requestFullscreen().then(() => {
-          setIsFullScreen(true);
-        }).catch(err => {
-          console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-        });
-      } else {
-        document.exitFullscreen().then(() => {
-          setIsFullScreen(false);
-        }).catch(err => {
-          console.error(`Error attempting to exit full-screen mode: ${err.message} (${err.name})`);
-        });
-      }
+        if (!document.fullscreenElement) {
+            mediaRef.current.requestFullscreen().then(() => {
+                setIsFullScreen(true);
+            }).catch(err => {
+                console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            document.exitFullscreen().then(() => {
+                setIsFullScreen(false);
+            }).catch(err => {
+                console.error(`Error attempting to exit full-screen mode: ${err.message} (${err.name})`);
+            });
+        }
     }
-  };
+};
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
