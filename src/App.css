@@ -1,33 +1,77 @@
 /* General Body Styles */
+:root {
+  --bg-color-dark: #1a1a2e;
+  --app-bg-dark: #16213e;
+  --text-color-dark: #e0e0e0;
+  --header-color-dark: #0f3460;
+  --shadow-color-dark: rgba(0, 0, 0, 0.5);
+  --control-bg-dark: #0f3460;
+  --control-border-dark: #533483;
+  --button-hover-dark: #0f3460;
+  --button-active-dark: #533483;
+  --remove-button-bg-dark: #e94560;
+  --remove-button-hover-dark: #b82c44;
+  --placeholder-text-dark: #a0a0a0;
+
+  --bg-color-light: #f0f2f5;
+  --app-bg-light: #ffffff;
+  --text-color-light: #333333;
+  --header-color-light: #4a90e2;
+  --shadow-color-light: rgba(0, 0, 0, 0.1);
+  --control-bg-light: #e0e0e0;
+  --control-border-light: #a0a0a0;
+  --button-hover-light: #d0d0d0;
+  --button-active-light: #a0a0a0;
+  --remove-button-bg-light: #ff6b6b;
+  --remove-button-hover-light: #e05252;
+  --placeholder-text-light: #666666;
+}
+
 body {
   margin: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #1a1a2e;
-  color: #e0e0e0;
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-dark);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+[data-theme='light'] {
+  --bg-color-dark: var(--bg-color-light);
+  --app-bg-dark: var(--app-bg-light);
+  --text-color-dark: var(--text-color-light);
+  --header-color-dark: var(--header-color-light);
+  --shadow-color-dark: var(--shadow-color-light);
+  --control-bg-dark: var(--control-bg-light);
+  --control-border-dark: var(--control-border-light);
+  --button-hover-dark: var(--button-hover-light);
+  --button-active-dark: var(--button-active-light);
+  --remove-button-bg-dark: var(--remove-button-bg-light);
+  --remove-button-hover-dark: var(--remove-button-hover-light);
+  --placeholder-text-dark: var(--placeholder-text-light);
 }
 
 /* Main App Container */
 .media-app {
-  background-color: #16213e;
+  background-color: var(--app-bg-dark);
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 10px 30px var(--shadow-color-dark);
   padding: 30px;
   width: 100%;
   max-width: 800px;
   text-align: center;
   animation: fadeIn 0.8s ease-out;
   border: 2px dashed transparent; /* Initial border for drag and drop */
-  transition: border-color 0.3s ease;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .media-app.drag-over {
-  border-color: #e94560; /* Highlight on drag over */
+  border-color: var(--remove-button-bg-dark); /* Highlight on drag over */
   background-color: #1f2a4a; /* Slightly darker background */
 }
 
@@ -38,10 +82,30 @@ body {
 
 /* Header */
 .media-app h1 {
-  color: #0f3460;
+  color: var(--header-color-dark);
   margin-bottom: 25px;
   font-size: 2.5em;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme Toggle */
+.theme-toggle-container {
+  text-align: right;
+  margin-bottom: 20px;
+}
+
+.theme-toggle-button {
+  background-color: var(--control-bg-dark);
+  color: var(--text-color-dark);
+  border: 1px solid var(--control-border-dark);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--button-hover-dark);
 }
 
 /* Controls Section */
@@ -55,28 +119,28 @@ body {
 
 /* Custom File Upload Button */
 .custom-file-upload {
-  background: linear-gradient(45deg, #533483, #0f3460);
-  color: #e0e0e0;
+  background: linear-gradient(45deg, var(--control-border-dark), var(--control-bg-dark));
+  color: var(--text-color-dark);
   border: none;
   padding: 12px 25px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1em;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px var(--shadow-color-dark);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .custom-file-upload:hover {
-  background: linear-gradient(45deg, #0f3460, #533483);
+  background: linear-gradient(45deg, var(--control-bg-dark), var(--control-border-dark));
   transform: translateY(-2px);
 }
 
 .custom-file-upload:active {
   transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px var(--shadow-color-dark);
 }
 
 .custom-file-upload svg {
@@ -85,7 +149,7 @@ body {
 
 /* Remove Button */
 .remove-button {
-  background-color: #e94560;
+  background-color: var(--remove-button-bg-dark);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -93,20 +157,20 @@ body {
   cursor: pointer;
   font-size: 1em;
   transition: background-color 0.3s ease, transform 0.2s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px var(--shadow-color-dark);
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
 .remove-button:hover {
-  background-color: #b82c44;
+  background-color: var(--remove-button-hover-dark);
   transform: translateY(-2px);
 }
 
 .remove-button:active {
   transform: translateY(0);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px var(--shadow-color-dark);
 }
 
 .remove-button svg {
@@ -120,53 +184,56 @@ body {
   justify-content: center;
   align-items: center;
   gap: 15px;
-  background-color: #0f3460;
+  background-color: var(--control-bg-dark);
   padding: 15px 20px;
   border-radius: 10px;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 10px var(--shadow-color-dark);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .playback-controls label {
   font-size: 1.1em;
-  color: #c0c0c0;
+  color: var(--text-color-dark);
 }
 
 .playback-controls select {
-  background-color: #533483;
-  color: #e0e0e0;
-  border: 1px solid #9a86a7;
+  background-color: var(--control-border-dark);
+  color: var(--text-color-dark);
+  border: 1px solid var(--placeholder-text-dark);
   padding: 8px 15px;
   border-radius: 6px;
   font-size: 1em;
   cursor: pointer;
   outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
 }
 
 .playback-controls select:focus {
-  border-color: #e94560;
+  border-color: var(--remove-button-bg-dark);
   box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
 }
 
 /* Player Box */
 .player-box {
   margin-top: 30px;
-  background-color: #0f3460;
+  background-color: var(--control-bg-dark);
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 5px 15px var(--shadow-color-dark);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 200px; /* Ensure visibility even without media */
+  position: relative; /* For play/pause button positioning */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .player {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease;
+  box-shadow: 0 5px 15px var(--shadow-color-dark);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .player:focus {
@@ -176,9 +243,42 @@ body {
 
 /* Placeholder Text */
 .placeholder-text {
-  color: #a0a0a0;
+  color: var(--placeholder-text-dark);
   font-size: 1.2em;
   font-style: italic;
+  transition: color 0.3s ease;
+}
+
+/* Play/Pause Button */
+.play-pause-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 1.5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+  pointer-events: none; /* Allow clicks to pass through when hidden */
+}
+
+.player-box:hover .play-pause-button,
+.play-pause-button.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.play-pause-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
 /* Responsive Design */
@@ -189,9 +289,10 @@ body {
   }
 
   .media-app.drag-over {
-    border-color: #e94560;
+    border-color: var(--remove-button-bg-dark);
     background-color: #1f2a4a;
   }
+
   .media-app h1 {
     font-size: 2em;
   }
@@ -209,5 +310,11 @@ body {
   .playback-controls {
     flex-direction: column;
     gap: 10px;
+  }
+
+  .play-pause-button {
+    width: 60px;
+    height: 60px;
+    font-size: 1.2em;
   }
 }

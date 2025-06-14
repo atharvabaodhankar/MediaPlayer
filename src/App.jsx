@@ -8,11 +8,66 @@ function App() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const mediaRef = useRef(null);
 
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme ? savedTheme : 'dark';
+  });
+
   useEffect(() => {
     if (mediaRef.current) {
       mediaRef.current.playbackRate = playbackRate;
     }
   }, [playbackRate, mediaSrc]);
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (!mediaRef.current) return;
+
+      switch (e.code) {
+        case 'Space':
+          e.preventDefault();
+          if (mediaRef.current.paused) {
+            mediaRef.current.play();
+            setIsPlaying(true);
+          } else {
+            mediaRef.current.pause();
+            setIsPlaying(false);
+          }
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          mediaRef.current.currentTime += 5; // Seek forward 5 seconds
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          mediaRef.current.currentTime -= 5; // Seek backward 5 seconds
+          break;
+        case 'NumpadAdd':
+        case 'Equal': // For '+' without numpad
+          e.preventDefault();
+          setPlaybackRate((prevRate) => Math.min(prevRate + 0.25, 2));
+          break;
+        case 'NumpadSubtract':
+        case 'Minus': // For '-' without numpad
+          e.preventDefault();
+          setPlaybackRate((prevRate) => Math.max(prevRate - 0.25, 0.5));
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const handleMediaUpload = (file) => {
     if (!file) return;
@@ -68,14 +123,35 @@ function App() {
     setPlaybackRate(parseFloat(e.target.value));
   };
 
+  const handlePlayPause = () => {
+    if (mediaRef.current) {
+      if (mediaRef.current.paused) {
+        mediaRef.current.play();
+        setIsPlaying(true);
+      } else {
+        mediaRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  };
+
+  const handleToggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
+
   return (
     <div
-      className="media-app"
+      className={`media-app ${theme}-theme`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <h1>🎵 Online Media Player 🎬</h1>
+      <div className="theme-toggle-container">
+        <button onClick={handleToggleTheme} className="theme-toggle-button">
+          {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
+        </button>
+      </div>
       <div className="controls">
         <label htmlFor="file-upload" className="custom-file-upload">
           <FaFileUpload /> Select Media File
@@ -104,13 +180,32 @@ function App() {
 
       <div className="player-box">
         {mediaType === 'video' && mediaSrc && (
-          <video controls src={mediaSrc} className="player" ref={mediaRef} />
+          <video
+            controls
+            src={mediaSrc}
+            className="player"
+            ref={mediaRef}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
         )}
         {mediaType === 'audio' && mediaSrc && (
-          <audio controls src={mediaSrc} className="player" ref={mediaRef} />
+          <audio
+            controls
+            src={mediaSrc}
+            className="player"
+            ref={mediaRef}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+          />
         )}
         {!mediaSrc && (
           <p className="placeholder-text">Drag & Drop your media file here, or click to upload!</p>
+        )}
+        {mediaSrc && (
+          <button onClick={handlePlayPause} className="play-pause-button">
+            {isPlaying ? 'Pause' : 'Play'}
+          </button>
         )}
       </div>
     </div>
