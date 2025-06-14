@@ -246,49 +246,121 @@ function App() {
         </div>
       )}
 
-      {mediaSrc && (
-        <div className="media-controls-overlay">
-          <div className="seek-bar-container">
-            <input
-              type="range"
-              min="0"
-              max={duration}
-              value={currentTime}
-              className="seek-bar"
-              onChange={handleSeek}
-            />
-            <div className="time-display">
-              <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
-            </div>
-          </div>
-          <button onClick={handlePlayPause} className="play-pause-button">
-            {isPlaying ? 'Pause' : 'Play'}
-          </button>
-          <button onClick={handleFullScreenToggle} className="fullscreen-button">
-            {isFullScreen ? 'Exit Fullscreen' : 'Fullscreen'}
-          </button>
-        </div>
-      )}
-
-      <div className="player-box">
+      <div className="player-box" onClick={mediaType === 'video' && mediaSrc ? handlePlayPause : null}>
         {mediaType === 'video' && mediaSrc && (
-          <video
-            controls
-            src={mediaSrc}
-            className="player"
-            ref={mediaRef}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
-            onEnded={() => setIsPlaying(false)}
-          />
+          <>
+            <video
+              src={mediaSrc}
+              className="player"
+              ref={mediaRef}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              onEnded={() => setIsPlaying(false)}
+            />
+            <div className="youtube-style-controls">
+              <div className="progress-bar-container">
+                <input
+                  type="range"
+                  min="0"
+                  max={duration}
+                  value={currentTime}
+                  className="youtube-progress-bar"
+                  onChange={handleSeek}
+                />
+              </div>
+              <div className="controls-buttons">
+                <button onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }} className="yt-control-button">
+                  {isPlaying ? '❚❚' : '▶'}
+                </button>
+                <div className="time-display">
+                  <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
+                </div>
+                <div className="right-controls">
+                  <select 
+                    value={playbackRate} 
+                    onChange={handlePlaybackRateChange}
+                    onClick={(e) => e.stopPropagation()}
+                    className="yt-speed-select"
+                  >
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1">1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                  </select>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleFullScreenToggle();
+                    }} 
+                    className="yt-control-button"
+                  >
+                    {isFullScreen ? '⤦' : '⤢'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {mediaType === 'audio' && mediaSrc && (
+          <>
+            <audio
+              src={mediaSrc}
+              className="player audio-player"
+              ref={mediaRef}
+              onPlay={() => setIsPlaying(true)}
+              onPause={() => setIsPlaying(false)}
+              onEnded={() => setIsPlaying(false)}
+            />
+            <div className="audio-visualization">
+              <div className="audio-wave"></div>
+            </div>
+            <div className="youtube-style-controls">
+              <div className="progress-bar-container">
+                <input
+                  type="range"
+                  min="0"
+                  max={duration}
+                  value={currentTime}
+                  className="youtube-progress-bar"
+                  onChange={handleSeek}
+                />
+              </div>
+              <div className="controls-buttons">
+                <button onClick={(e) => {
+                  e.stopPropagation();
+                  handlePlayPause();
+                }} className="yt-control-button">
+                  {isPlaying ? '❚❚' : '▶'}
+                </button>
+                <div className="time-display">
+                  <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
+                </div>
+                <div className="right-controls">
+                  <select 
+                    value={playbackRate} 
+                    onChange={handlePlaybackRateChange}
+                    onClick={(e) => e.stopPropagation()}
+                    className="yt-speed-select"
+                  >
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1">1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </>
         )}
         {!mediaSrc && (
           <p className="placeholder-text">Drag & Drop your media file here, or click to upload!</p>
-        )}
-        {mediaSrc && (
-          <button onClick={handlePlayPause} className="play-pause-button">
-            {isPlaying ? 'Pause' : 'Play'}
-          </button>
         )}
       </div>
     </div>
