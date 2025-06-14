@@ -9,6 +9,9 @@ function App() {
   const mediaRef = useRef(null);
 
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isFullScreen, setIsFullScreen] = useState(false);
   const [theme, setTheme] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     return savedTheme ? savedTheme : 'dark';
@@ -37,9 +40,13 @@ function App() {
             setIsPlaying(true);
           } else {
             mediaRef.current.pause();
-            setIsPlaying(false);
-          }
-          break;
+          setIsPlaying(false);
+        }
+        break;
+      case 'KeyF':
+        e.preventDefault();
+        handleFullScreenToggle();
+        break;
         case 'ArrowRight':
           e.preventDefault();
           mediaRef.current.currentTime += 5; // Seek forward 5 seconds
@@ -64,10 +71,29 @@ function App() {
     };
 
     document.addEventListener('keydown', handleKeyDown);
+
+    const mediaElement = mediaRef.current;
+    if (mediaElement) {
+      mediaElement.addEventListener('timeupdate', () => {
+        setCurrentTime(mediaElement.currentTime);
+      });
+      mediaElement.addEventListener('loadedmetadata', () => {
+        setDuration(mediaElement.duration);
+      });
+    }
+
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      if (mediaElement) {
+        mediaElement.removeEventListener('timeupdate', () => {
+          setCurrentTime(mediaElement.currentTime);
+        });
+        mediaElement.removeEventListener('loadedmetadata', () => {
+          setDuration(mediaElement.duration);
+        });
+      }
     };
-  }, []);
+  }, [mediaSrc]);
 
   const handleMediaUpload = (file) => {
     if (!file) return;
@@ -139,6 +165,37 @@ function App() {
     setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
   };
 
+  const handleSeek = (e) => {
+    if (mediaRef.current) {
+      mediaRef.current.currentTime = e.target.value;
+      setCurrentTime(e.target.value);
+    }
+  };
+
+  const handleFullScreenToggle = () => {
+    if (mediaRef.current) {
+      if (!document.fullscreenElement) {
+        mediaRef.current.requestFullscreen().then(() => {
+          setIsFullScreen(true);
+        }).catch(err => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+        });
+      } else {
+        document.exitFullscreen().then(() => {
+          setIsFullScreen(false);
+        }).catch(err => {
+          console.error(`Error attempting to exit full-screen mode: ${err.message} (${err.name})`);
+        });
+      }
+    }
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
   return (
     <div
       className={`media-app ${theme}-theme`}
@@ -162,6 +219,17 @@ function App() {
             <FaTrashAlt /> Remove Media
           </button>
         )}
+        {mediaType === 'audio' && mediaSrc && (
+          <audio
+            controls
+            src={mediaSrc}
+            className="player"
+            ref={mediaRef}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
+          />
+        )}
       </div>
 
       {mediaSrc && (
@@ -178,6 +246,30 @@ function App() {
         </div>
       )}
 
+      {mediaSrc && (
+        <div className="media-controls-overlay">
+          <div className="seek-bar-container">
+            <input
+              type="range"
+              min="0"
+              max={duration}
+              value={currentTime}
+              className="seek-bar"
+              onChange={handleSeek}
+            />
+            <div className="time-display">
+              <span>{formatTime(currentTime)}</span> / <span>{formatTime(duration)}</span>
+            </div>
+          </div>
+          <button onClick={handlePlayPause} className="play-pause-button">
+            {isPlaying ? 'Pause' : 'Play'}
+          </button>
+          <button onClick={handleFullScreenToggle} className="fullscreen-button">
+            {isFullScreen ? 'Exit Fullscreen' : 'Fullscreen'}
+          </button>
+        </div>
+      )}
+
       <div className="player-box">
         {mediaType === 'video' && mediaSrc && (
           <video
@@ -187,16 +279,7 @@ function App() {
             ref={mediaRef}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
-          />
-        )}
-        {mediaType === 'audio' && mediaSrc && (
-          <audio
-            controls
-            src={mediaSrc}
-            className="player"
-            ref={mediaRef}
-            onPlay={() => setIsPlaying(true)}
-            onPause={() => setIsPlaying(false)}
+            onEnded={() => setIsPlaying(false)}
           />
         )}
         {!mediaSrc && (

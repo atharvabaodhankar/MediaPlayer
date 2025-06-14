@@ -199,14 +199,117 @@ body {
 .playback-controls select {
   background-color: var(--control-border-dark);
   color: var(--text-color-dark);
-  border: 1px solid var(--placeholder-text-dark);
+  border: 1px solid var(--control-border-dark);
   padding: 8px 15px;
-  border-radius: 6px;
-  font-size: 1em;
+  border-radius: 5px;
   cursor: pointer;
-  outline: none;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
+
+.playback-controls select:hover {
+  background-color: var(--button-hover-dark);
+}
+
+/* Player Box */
+.player-box {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 25px auto;
+  background-color: black;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px var(--shadow-color-dark);
+}
+
+.player {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Custom Controls Overlay */
+.media-controls-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+  background-color: var(--control-bg-dark);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px var(--shadow-color-dark);
+}
+
+.seek-bar-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.seek-bar {
+  width: 90%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: var(--control-border-dark);
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.2s ease;
+}
+
+.seek-bar::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--header-color-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.seek-bar::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--header-color-dark);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.time-display {
+  color: var(--text-color-dark);
+  font-size: 0.9em;
+}
+
+.play-pause-button,
+.fullscreen-button {
+  background-color: var(--header-color-dark);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px var(--shadow-color-dark);
+}
+
+.play-pause-button:hover,
+.fullscreen-button:hover {
+  background-color: var(--button-hover-dark);
+  transform: translateY(-2px);
+}
+
+.play-pause-button:active,
+.fullscreen-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px var(--shadow-color-dark);
+}
+
 
 .playback-controls select:focus {
   border-color: var(--remove-button-bg-dark);
