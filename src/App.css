@@ -1,20 +1,201 @@
+/* General Body Styles */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #fff;
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #1a1a2e;
+  color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Main App Container */
+.media-app {
+  background-color: #16213e;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  width: 100%;
+  max-width: 800px;
   text-align: center;
-  padding: 2rem;
+  animation: fadeIn 0.8s ease-out;
 }
 
-.media-app input {
-  margin: 1rem 0;
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
+/* Header */
+.media-app h1 {
+  color: #0f3460;
+  margin-bottom: 25px;
+  font-size: 2.5em;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Controls Section */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+/* Custom File Upload Button */
+.custom-file-upload {
+  background: linear-gradient(45deg, #533483, #0f3460);
+  color: #e0e0e0;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-file-upload:hover {
+  background: linear-gradient(45deg, #0f3460, #533483);
+  transform: translateY(-2px);
+}
+
+.custom-file-upload:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.custom-file-upload svg {
+  font-size: 1.2em;
+}
+
+/* Remove Button */
+.remove-button {
+  background-color: #e94560;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.remove-button:hover {
+  background-color: #b82c44;
+  transform: translateY(-2px);
+}
+
+.remove-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.remove-button svg {
+  font-size: 1.2em;
+}
+
+/* Playback Controls */
+.playback-controls {
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  background-color: #0f3460;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.playback-controls label {
+  font-size: 1.1em;
+  color: #c0c0c0;
+}
+
+.playback-controls select {
+  background-color: #533483;
+  color: #e0e0e0;
+  border: 1px solid #9a86a7;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.playback-controls select:focus {
+  border-color: #e94560;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.3);
+}
+
+/* Player Box */
 .player-box {
-  margin-top: 2rem;
+  margin-top: 30px;
+  background-color: #0f3460;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px; /* Ensure visibility even without media */
 }
 
 .player {
-  max-width: 90%;
+  max-width: 100%;
+  height: auto;
   border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.player:focus {
+  outline: none;
+  transform: scale(1.01);
+}
+
+/* Placeholder Text */
+.placeholder-text {
+  color: #a0a0a0;
+  font-size: 1.2em;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .media-app {
+    padding: 20px;
+  }
+
+  .media-app h1 {
+    font-size: 2em;
+  }
+
+  .controls {
+    flex-direction: column;
+  }
+
+  .custom-file-upload,
+  .remove-button {
+    width: 100%;
+    max-width: unset;
+  }
+
+  .playback-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
 }
