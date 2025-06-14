@@ -14,8 +14,7 @@ function App() {
     }
   }, [playbackRate, mediaSrc]);
 
-  const handleMediaUpload = (e) => {
-    const file = e.target.files[0];
+  const handleMediaUpload = (file) => {
     if (!file) return;
 
     const url = URL.createObjectURL(file);
@@ -32,6 +31,30 @@ function App() {
     }
   };
 
+  const handleFileChange = (e) => {
+    handleMediaUpload(e.target.files[0]);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.add('drag-over');
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('drag-over');
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.currentTarget.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    handleMediaUpload(file);
+  };
+
   const handleRemoveMedia = () => {
     if (mediaSrc) {
       URL.revokeObjectURL(mediaSrc);
@@ -46,13 +69,18 @@ function App() {
   };
 
   return (
-    <div className="media-app">
+    <div
+      className="media-app"
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <h1>🎵 Online Media Player 🎬</h1>
       <div className="controls">
         <label htmlFor="file-upload" className="custom-file-upload">
           <FaFileUpload /> Select Media File
         </label>
-        <input id="file-upload" type="file" accept="video/*,audio/*" onChange={handleMediaUpload} style={{ display: 'none' }} />
+        <input id="file-upload" type="file" accept="video/*,audio/*" onChange={handleFileChange} style={{ display: 'none' }} />
         {mediaSrc && (
           <button onClick={handleRemoveMedia} className="remove-button">
             <FaTrashAlt /> Remove Media
@@ -82,7 +110,7 @@ function App() {
           <audio controls src={mediaSrc} className="player" ref={mediaRef} />
         )}
         {!mediaSrc && (
-          <p className="placeholder-text">Upload a video or audio file to start playing!</p>
+          <p className="placeholder-text">Drag & Drop your media file here, or click to upload!</p>
         )}
       </div>
     </div>

@@ -22,6 +22,13 @@ body {
   max-width: 800px;
   text-align: center;
   animation: fadeIn 0.8s ease-out;
+  border: 2px dashed transparent; /* Initial border for drag and drop */
+  transition: border-color 0.3s ease;
+}
+
+.media-app.drag-over {
+  border-color: #e94560; /* Highlight on drag over */
+  background-color: #1f2a4a; /* Slightly darker background */
 }
 
 @keyframes fadeIn {
@@ -178,8 +185,13 @@ body {
 @media (max-width: 600px) {
   .media-app {
     padding: 20px;
+    border: 2px dashed transparent; /* Ensure border is consistent on small screens */
   }
 
+  .media-app.drag-over {
+    border-color: #e94560;
+    background-color: #1f2a4a;
+  }
   .media-app h1 {
     font-size: 2em;
   }
